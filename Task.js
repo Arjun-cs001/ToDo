@@ -1,7 +1,10 @@
 let TaskInput  = document.getElementById("TaskInput");
 let addButton = document.getElementById("AddButton");
 let TaskList = document.getElementById("taskList");
+
 let Tasks = []; //array to hold tasks
+loadTasks();
+renderTasks();
 
 function task(name){
     this.id = Date.now();
@@ -31,7 +34,7 @@ addButton.addEventListener("click",()=>{
 
 //function to render tasks
 function renderTasks(){
-    loadTasks();
+   
     TaskList.innerHTML = Tasks.slice().reverse().map(task=>{
     return ` <div id="${task.id}" class="Task-container ${task.completed ? 'completed' : ''}">
                 <input type="checkbox" class="Task-Checkbox NoEffect" ${task.completed ? 'checked' : ''}>
@@ -62,6 +65,7 @@ TaskList.addEventListener("click",(e)=>{
     else if(e.target.classList.contains("Edit-Button")){
         const editbtn = e.target;
         EditName(e);
+      
         editbtn.style.visibility = "hidden";
         const deletebtn = e.target.parentElement.querySelector(".Delete-Button");
         deletebtn.style.visibility = "hidden";
@@ -113,6 +117,7 @@ function EditName(e){
                 console.log(`New name entered: ${newName}`);
                 TaskName.disabled = true;
                 console.log(`Task  renamed to ${task.name}`);
+                saveTask();
                 e.target.style.visibility = "visible";
                 const deletebtn = e.target.parentElement.querySelector(".Delete-Button");
                 deletebtn.style.visibility = "visible";
@@ -130,6 +135,7 @@ function EditName(e){
 
 function saveTask(){
     localStorage.setItem("Tasks",JSON.stringify(Tasks));
+    console.log('saved')
 }
 
 function loadTasks() {
