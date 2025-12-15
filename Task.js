@@ -19,6 +19,7 @@ addButton.addEventListener("click",()=>{
         Tasks.push(newTask);
         console.log(`Task Added : ${newTask.name}`);
         TaskInput.value = "";
+        saveTask();
         renderTasks();
     }
     else{
@@ -30,6 +31,7 @@ addButton.addEventListener("click",()=>{
 
 //function to render tasks
 function renderTasks(){
+    loadTasks();
     TaskList.innerHTML = Tasks.slice().reverse().map(task=>{
     return ` <div id="${task.id}" class="Task-container ${task.completed ? 'completed' : ''}">
                 <input type="checkbox" class="Task-Checkbox NoEffect" ${task.completed ? 'checked' : ''}>
@@ -89,6 +91,7 @@ function deleteTask(task){
     const id = task.id;
     Tasks = Tasks.filter(task => task.id != id);
     console.log(`task ${task.name} deleted`);
+    saveTask();
     renderTasks();
 }
 //function to edit task name with task object and event
@@ -125,4 +128,16 @@ function EditName(e){
            
 }
 
+function saveTask(){
+    localStorage.setItem("Tasks",JSON.stringify(Tasks));
+}
 
+function loadTasks() {
+  const storedTasks = localStorage.getItem("Tasks");
+
+  if (storedTasks) {
+    Tasks = JSON.parse(storedTasks);
+  } else {
+    Tasks = [];
+  }
+}
